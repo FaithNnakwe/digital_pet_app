@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const MyApp()); // Example 1: Create Repository for Git Collab.
 }
 
 class MyApp extends StatelessWidget {
