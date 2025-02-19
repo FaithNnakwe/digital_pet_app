@@ -21,6 +21,8 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
 
   // Timer to automatically increase hunger level
   late Timer _hungerTimer;
+  late Timer _winTimer;
+  bool hasWon = false;
 
   @override
   void initState() {
@@ -34,6 +36,7 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
       setState(() {
         hungerLevel = (hungerLevel + 5).clamp(0, 100);
         _updateHappiness();
+        _checkLossCondition();  // Check for loss condition every time hunger or happiness changes
       });
     });
   }
@@ -42,6 +45,9 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
   @override
   void dispose() {
     _hungerTimer.cancel();
+    if (_winTimer.isActive) {
+      _winTimer.cancel();
+    }
     super.dispose();
   }
 
@@ -50,6 +56,8 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
     setState(() {
       happinessLevel = (happinessLevel + 10).clamp(0, 100);
       _updateHunger();
+      _checkWinCondition();  // Check for win condition every time happiness changes
+      _checkLossCondition();
     });
   }
 
@@ -58,6 +66,7 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
     setState(() {
       hungerLevel = (hungerLevel - 10).clamp(0, 100);
       _updateHappiness();
+      _checkLossCondition();
     });
   }
 
@@ -69,6 +78,7 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
       happinessLevel = (happinessLevel + 10).clamp(0, 100);
     }
   }
+
   // Increase hunger level slightly when playing with the pet
   void _updateHunger() {
     hungerLevel = (hungerLevel + 5).clamp(0, 100);
@@ -105,6 +115,44 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
       petName = nameController.text.isEmpty ? petName : nameController.text;
       isNameConfirmed = true;
     });
+  }
+
+  // Check if win condition is met
+  void _checkWinCondition() {
+    if (happinessLevel > 80 && !hasWon) {
+      // Start a timer to check if happiness stays above 80 for 1 minute
+      _winTimer = Timer(Duration(minutes: 1), () {
+        setState(() {
+          hasWon = true;
+        });
+      });
+    }
+  }
+
+  // Check if loss condition is met
+  void _checkLossCondition() {
+    if (hungerLevel == 100 && happinessLevel == 10) {
+      _showGameOverDialog();
+    }
+  }
+
+  // Show Game Over dialog
+  void _showGameOverDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Game Over'),
+        content: Text('Hunger Level reached 100, and Happiness Level dropped to 10.'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('OK'),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -144,7 +192,7 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
                     style: TextStyle(fontSize: 20.0),
                   ),
                   Text(
-                    'Mood: $_getMoodText()',
+                    'Mood: ${_getMoodText()}',
                     style: TextStyle(fontSize: 20.0),
                   ),
                 ],
@@ -187,6 +235,11 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
               onPressed: _feedPet,
               child: Text('Feed Your Pet'),
             ),
+            if (hasWon)
+              Text(
+                'You Win!',
+                style: TextStyle(fontSize: 24.0, color: Colors.green),
+              ),
           ],
         ),
       ),
