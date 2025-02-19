@@ -1,0 +1,2 @@
+C:/Users/ujunw/Downloads/Flutter/In_class Activities/digital_pet_app/android/app/.cxx/RelWithDebInfo/4b26g3r5/x86/CMakeFiles/edit_cache.dir
+C:/Users/ujunw/Downloads/Flutter/In_class Activities/digital_pet_app/android/app/.cxx/RelWithDebInfo/4b26g3r5/x86/CMakeFiles/rebuild_cache.dir
