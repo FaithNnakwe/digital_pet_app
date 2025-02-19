@@ -82,9 +82,9 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
         child: ClipOval(  // Clip the image to fit inside the circular container
           child: Image.network(
             'https://www.cdc.gov/healthy-pets/media/images/2024/04/GettyImages-598175960-cute-dog-headshot.jpg',
-            height: 200,
-            width: 200,
-            fit: BoxFit.cover,  // Ensures the image fits within the circle without distorting
+            height: 100,
+            width: 100,
+              // Ensures the image fits within the circle without distorting
           ),
         ),
       ),
