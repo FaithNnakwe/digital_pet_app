@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async'; // For using Timer
-
+// Faith Nnakwe and Chriselle
 void main() {
   runApp(MaterialApp(
     home: DigitalPetApp(),
